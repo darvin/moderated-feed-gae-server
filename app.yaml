@@ -1,0 +1,16 @@
+application: tvfansmagazine
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+
+
+- url: /tasks/.*
+  script: tasks.app
+  login: admin
+
+
+- url: /.*
+  script: main.app
