@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Moderate posts</title>
+</head>
+<body>
+
+<ul id="post-list">
+    {% for post in posts %}
+        <li>
+            <ul class="post">
+                <li>{{ post["author"].name }}</li>
+                <li>{{ post["title"] }}</li>
+                <li>{{ post["tags"] }}</li>
+                <li>{{ post["content"] }}</li>
+                
+                <li>
+                    <a href="/admin/signature_toggle/{{ post["signature_key"] }}">
+                    {% if post["signature_time"] %}
+                        Published {{ post["signature_time"] }}
+                    {% else %}
+                        Publish
+                    {% endif %}
+                    </a>
+                    
+                </li>
+
+            </ul>
+
+        </li>
+
+
+    {% endfor %}
+
+
+</ul>
+
+</body>
+</html>

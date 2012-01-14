@@ -1,4 +1,4 @@
-application: tvfansmagazine
+application: tv-fans
 version: 1
 runtime: python27
 api_version: 1
@@ -6,11 +6,12 @@ threadsafe: true
 
 handlers:
 
-
-- url: /tasks/.*
-  script: tasks.app
-  login: admin
-
+- url: /admin/.*
+  script: admin.app
 
 - url: /.*
   script: main.app
+
+libraries:
+- name: jinja2
+  version: latest

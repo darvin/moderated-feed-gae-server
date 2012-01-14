@@ -1,7 +1,4 @@
 cron:
-- description: fetching blog posts
-  url: /tasks/fetch_articles
-  schedule: every 30 minutes
-- description: fetching new episodes names
-  url: /tasks/fetch_shows_names
+- description: do nothing
+  url: /
   schedule: every 24 hours
