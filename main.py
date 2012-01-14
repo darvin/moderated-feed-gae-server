@@ -3,7 +3,7 @@ import os
 from google.appengine.api import urlfetch
 from google.appengine.ext import webapp
 import jinja2
-from models import Author, Signatures
+from models import Author, Signatures, BlogPost
 from settings import FEED_URL, DEBUG
 from utils import feedparser
 feedparser.SANITIZE_HTML = 0
@@ -19,15 +19,9 @@ class MainHandler(webapp.RequestHandler):
         signatures = Signatures.signatures()
         posts = []
         for entry in d['entries']:
-            signature = Signatures.signature_key_for_post(entry)
-            if signature not in signatures:
-                continue
-            author =  Author.get_by_key_name(entry["source"]["id"])
-            post = {"title": entry["title"],
-                    "tags": entry.get("tags", "NOTAGS!!!!"),
-                    "content": entry["content"][0]["value"],
-                    "author": author}
-            posts.append(post)
+            blog_post = BlogPost.blog_post_from_feed_entry(entry)
+            if blog_post.signature in signatures:
+                posts.append(blog_post)
 
         template_values = {"posts":posts, "DEBUG":DEBUG}
 

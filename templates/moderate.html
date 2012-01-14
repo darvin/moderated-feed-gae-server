@@ -7,18 +7,18 @@
 <body>
 
 <ul id="post-list">
-    {% for post in posts %}
+    {% for post, signature_time in posts %}
         <li>
             <ul class="post">
-                <li>{{ post["author"].name }}</li>
-                <li>{{ post["title"] }}</li>
-                <li>{{ post["tags"] }}</li>
-                <li>{{ post["content"] }}</li>
+                <li>{{ post.author.name }}</li>
+                <li>{{ post.title }}</li>
+                <li>{{ post.tags }}</li>
+                <li>{{ post.content }}</li>
                 
                 <li>
-                    <a href="/admin/signature_toggle/{{ post["signature_key"] }}">
-                    {% if post["signature_time"] %}
-                        Published {{ post["signature_time"] }}
+                    <a href="/admin/signature_toggle/{{ post.signature }}">
+                    {% if signature_time %}
+                        Published {{ signature_time }}
                     {% else %}
                         Publish
                     {% endif %}

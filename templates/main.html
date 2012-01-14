@@ -10,10 +10,10 @@
     {% for post in posts %}
         <li>
             <ul class="post">
-                <li>{{ post["author"].name }}</li>
-                <li>{{ post["title"] }}</li>
-                <li>{{ post["tags"] }}</li>
-                <li>{{ post["content"] }}</li>
+                <li>{{ post.author.name }}</li>
+                <li>{{ post.title }}</li>
+                <li>{{ post.tags }}</li>
+                <li>{{ post.content }}</li>
                 
                 <li>
 
@@ -21,11 +21,11 @@
                     <script type="text/javascript">
                         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
                         var disqus_shortname = 'tv-fans'; // required: replace example with your forum shortname
-                        var disqus_identifier = '{{ post["signature_key"] }}';
+                        var disqus_identifier = '{{ post.signature }}';
                         {% if DEBUG %}
                             var disqus_developer = 1;
                         {% endif %}
-                        var disqus_title = '{{ post["title"] }}';
+                        var disqus_title = '{{ post.title }}';
 
                         /* * * DON'T EDIT BELOW THIS LINE * * */
                         (function() {

@@ -56,3 +56,28 @@ class Signatures(SingleModel):
         count = len(filter(lambda x: x>since, s.times))
         return s.hashes[-count:]
 
+
+class Tags(SingleModel):
+    enabled = db.StringListProperty()
+    available = db.StringListProperty()
+
+
+class BlogPost(db.Model):
+    author = db.ReferenceProperty(Author)
+    tags = db.StringListProperty()
+    title = db.StringProperty()
+    content = db.TextProperty()
+    signature = db.StringProperty()
+
+
+    @classmethod
+    def blog_post_from_feed_entry(cls, entry):
+        author =  Author.get_or_insert(key_name=entry["source"]["id"],
+            title=entry["source"]["title"],
+            name=entry["author"])
+
+        return cls(author=author,
+            tags=[t["term"] for t in entry.get("tags", [])],
+            title=entry["title"],
+            content=entry["content"][0]["value"],
+            signature=Signatures.signature_key_for_post(entry))
