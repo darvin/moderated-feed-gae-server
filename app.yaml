@@ -9,6 +9,9 @@ handlers:
 - url: /admin/.*
   script: admin.app
 
+- url: /api/.*
+  script: api.app
+
 - url: /.*
   script: main.app
 
