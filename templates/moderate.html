@@ -1,40 +1,47 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Moderate posts</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Moderate posts{% endblock %}
+{% block content %}
 
-<ul id="post-list">
+
+    <table class="zebra-striped">
+        <thead>
+            <tr>
+
+                <th>Post</th>
+                <th>Author</th>
+                <th>Publish</th>
+            </tr>
+
+        </thead>
+        <tbody>
     {% for post, signature_time in posts %}
-        <li>
-            <ul class="post">
-                <li>{{ post.author.name }}</li>
-                <li>{{ post.title }}</li>
-                <li>{{ post.tags }}</li>
-                <li>{{ post.content }}</li>
-                
-                <li>
-                    <a href="/admin/signature_toggle/{{ post.signature }}">
+        <tr>
+            <td><a href="{{ post.url }}">{{ post.title }}</a></td>
+            <td><a href="{{ post.author.url }}">{{ post.author.name }}</a></td>
+            <td>
+                <a href="/admin/signature_toggle/{{ post.signature }}"
+                        class="
+                        btn
+                        {% if signature_time %}
+                        primary
+                        {% else %}
+
+                        {% endif %}
+                        "
+                        >
                     {% if signature_time %}
-                        Published {{ signature_time }}
+                    Published {{ signature_time }}
                     {% else %}
-                        Publish
+                    Publish
                     {% endif %}
-                    </a>
-                    
-                </li>
+                </a>
 
-            </ul>
-
-        </li>
+            </td>
+        </tr>
 
 
     {% endfor %}
+        </tbody>
 
-
-</ul>
-
-</body>
-</html>
+    </table>
+{% endblock %}

@@ -1,7 +1,11 @@
 import hashlib
 import time
 from google.appengine.ext.db import polymodel
+import logging
+import sys
+from utils import strip_string
 
+print sys.path
 __author__ = 'darvin'
 
 
@@ -9,7 +13,7 @@ from google.appengine.ext import db
 
 
 class Author(db.Model):
-#    url = db.URLProperty(required=True)
+    url = db.URLProperty()
     image_url = db.URLProperty()
     name = db.StringProperty(required=True)
     title = db.StringProperty(required=True)
@@ -45,9 +49,13 @@ class Signatures(SingleModel):
     @classmethod
     def signature_key_for_post(cls, post):
         m = hashlib.md5()
-        m.update(post["title"].encode("utf-8"))
-        m.update(post["content"][0]["value"].encode("utf-8"))
-        m.update(post["source"]["id"].encode("utf-8"))
+
+        m.update(strip_string(
+            post["title"].encode("utf-8") +
+            post["source"]["link"].encode("utf-8") +
+            post["content"][0]["value"].encode("utf-8")))
+
+        logging.info(m.hexdigest())
         return m.hexdigest()
 
     @classmethod
@@ -68,16 +76,19 @@ class BlogPost(db.Model):
     title = db.StringProperty()
     content = db.TextProperty()
     signature = db.StringProperty()
+    url = db.URLProperty()
 
 
     @classmethod
     def blog_post_from_feed_entry(cls, entry):
         author =  Author.get_or_insert(key_name=entry["source"]["id"],
             title=entry["source"]["title"],
-            name=entry["author"])
+            name=entry["author"],
+            url=entry["source"]["link"])
 
         return cls(author=author,
             tags=[t["term"] for t in entry.get("tags", [])],
             title=entry["title"],
             content=entry["content"][0]["value"],
-            signature=Signatures.signature_key_for_post(entry))
+            signature=Signatures.signature_key_for_post(entry),
+            url=entry["link"])
