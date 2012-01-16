@@ -13,7 +13,6 @@ from google.appengine.ext import db
 
 
 class Author(db.Model):
-    url = db.URLProperty()
     image_url = db.URLProperty()
     name = db.StringProperty(required=True)
     title = db.StringProperty(required=True)
@@ -81,10 +80,11 @@ class BlogPost(db.Model):
 
     @classmethod
     def blog_post_from_feed_entry(cls, entry):
-        author =  Author.get_or_insert(key_name=entry["source"]["id"],
+        import pprint
+        pprint.pprint(entry)
+        author =  Author.get_or_insert(key_name=entry["source"]["link"],
             title=entry["source"]["title"],
-            name=entry["author"],
-            url=entry["source"]["link"])
+            name=entry["author"])
 
         return cls(author=author,
             tags=[t["term"] for t in entry.get("tags", [])],

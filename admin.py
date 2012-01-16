@@ -8,6 +8,7 @@ feedparser.SANITIZE_HTML = 0
 from settings import FEED_URL, DEBUG
 import jinja2
 import os
+import datetime
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join( os.path.dirname(__file__), "templates")))
@@ -64,6 +65,8 @@ class ModerateHandler(webapp.RequestHandler):
         for entry in d['entries']:
             blog_post = BlogPost.blog_post_from_feed_entry(entry)
             signature_time = signatures_and_times.get(blog_post.signature)
+            if signature_time:
+                signature_time = datetime.datetime.fromtimestamp(signature_time).strftime('%m/%d/%Y %H:%M')
             posts.append((blog_post, signature_time))
 
             for tag in blog_post.tags:

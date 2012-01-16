@@ -1,6 +1,6 @@
 from google.appengine.ext import webapp
 from webapp2_extras import json
-from models import Signatures, Tags
+from models import Signatures, Tags, Author
 from settings import DEBUG, FEED_URL
 
 __author__ = 'darvin'
@@ -26,6 +26,18 @@ class SignatureHandler(AbstractApiHandler):
 class TagsHandler(AbstractApiHandler):
     def get_responce(self, *args, **kwargs):
         return Tags.get_single().enabled
+        
+        
+class AuthorsHandler(AbstractApiHandler):
+    def get_responce(self, *args, **kwargs):
+        x = dict(
+            ((author.key().name(), {"url":author.key().name(),
+                             "image_url":author.image_url,
+                             "title":author.title,
+                             "subtitle":author.subtitle,
+                             "name":author.name}) for author in Author.all())
+        )
+        return x
 
 
 class InfoHandler(AbstractApiHandler):
@@ -41,6 +53,7 @@ app = webapp.WSGIApplication([
     ('/api/signatures/([0-9]+)', SignatureHandler),
 
     ('/api/tags', TagsHandler),
+    ('/api/authors', AuthorsHandler),
     ('/api/info', InfoHandler),
 ],
     debug=DEBUG)
